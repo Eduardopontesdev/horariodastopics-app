@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://SEU-DOMINIO/sitemap.xml
+Sitemap: https://app.horariodastopics.com.br/sitemap.xml
