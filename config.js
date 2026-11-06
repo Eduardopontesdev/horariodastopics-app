@@ -1,6 +1,6 @@
 // CONFIGURAÇÃO DO APP - preencha e salve. Vale para o app e para todas as páginas de rotas.
 window.TOPICS_CFG={
-  site:"https://SEU-DOMINIO",     // endereço final do app (sem barra no fim)
+  site:"https://app.horariodastopics.com.br",     // endereço final do app (sem barra no fim)
   ga:"",                    // ID do Google Analytics 4, ex.: "G-XXXXXXXXXX" (vazio = desligado)
   sb:{                      // contador no Supabase (vazio = desligado)
     url:"https://egfbvcfuizsyckmcnsue.supabase.co",                 // ex.: "https://abcdxyz.supabase.co"
