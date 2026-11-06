@@ -1,0 +1,64 @@
+TOPICS DE CAMOCIM - APP INSTALÁVEL, PRONTO PARA O GOOGLE
+
+ARQUIVOS
+ index.html ................ o app
+ horario-topics-*.html ..... uma página por rota (é isto que o Google indexa)
+ config.js ................. ÚNICO arquivo que você edita: endereço, Analytics e Supabase
+ tracker.js ................ contador de visitas/visualizações e Google Analytics
+ sitemap.xml, robots.txt ... ajudam o Google a encontrar as páginas
+ manifest.webmanifest, sw.js, icon-*.png ... fazem o app ser instalável e abrir sem internet
+ og-image.png .............. imagem que aparece quando o link é compartilhado
+ anuncios/home.jpg ......... banner da tela inicial (troque o arquivo mantendo o nome)
+ supabase.sql .............. exemplo para criar o contador (leia antes de rodar)
+
+1) COLOCAR NO AR (precisa de https)
+ Netlify Drop (app.netlify.com/drop): arraste esta pasta. Ou GitHub Pages / Cloudflare Pages.
+ O Blogger não aceita estes arquivos; use um endereço próprio, ex.: app.horariodastopics.com.br.
+
+2) TROCAR O ENDEREÇO (muito importante)
+ Os arquivos sitemap.xml, robots.txt, index.html e as páginas horario-*.html usam o endereço
+ https://SEU-DOMINIO como exemplo. Me diga o endereço final que eu gero a pasta de novo já certa,
+ ou use "localizar e substituir" na pasta inteira trocando https://SEU-DOMINIO pelo seu endereço.
+
+3) GOOGLE ENCONTRAR
+ a. Acesse search.google.com/search-console e adicione o endereço do app.
+ b. Envie o sitemap: https://SEU-ENDEREÇO/sitemap.xml
+ c. Em "Inspeção de URL", peça a indexação de index.html e de 2 ou 3 páginas de rota.
+ d. No seu site (horariodastopics.com.br), coloque um link bem visível para o app. Links de
+    sites que o Google já conhece aceleram a descoberta.
+ e. A indexação leva de alguns dias a algumas semanas. Faça o mesmo no Bing Webmaster Tools.
+ f. Mantenha os horários das páginas iguais aos do app (o Google compara).
+
+4) GOOGLE ANALYTICS
+ Crie uma propriedade GA4 em analytics.google.com, copie o "ID de métricas" (G-XXXXXXXXXX) e
+ coloque em config.js, campo ga. Eventos enviados: page_view (cada tela), visita,
+ clique (anuncio-...), compartilhar. Como isso usa cookies, vale um aviso de privacidade (LGPD);
+ a tela Sobre já avisa quando o contador está ligado.
+
+5) CONTADOR NO SUPABASE (passo a passo)
+ (Os nomes dos menus do Supabase podem mudar um pouco; a ideia é a mesma.)
+ a. Entre em supabase.com/dashboard e abra o projeto que você vai usar.
+ b. No menu da esquerda, clique em "SQL Editor" e depois em "New query".
+ c. Abra o arquivo supabase.sql, copie TODO o conteúdo, cole na caixa e clique em "Run".
+    Deve aparecer "Success". Isso cria a tabela topics_acessos, liga a segurança (RLS) e cria a
+    função topics_contagens. Não altera nenhuma tabela que já exista.
+ d. Em "Table Editor", a tabela topics_acessos deve aparecer vazia, com o RLS ligado.
+ e. Em "Project Settings" > "API" (ou no botão "Connect"), copie a "Project URL" e a chave pública:
+    "anon public" (em projetos novos pode se chamar "publishable").
+    NUNCA use a "service_role" nem a "secret": elas dão acesso total e não podem ficar no app.
+ f. Abra o config.js e preencha sb.url (Project URL) e sb.key (chave pública).
+    Os campos table e rpc já vêm preenchidos com topics_acessos e topics_contagens.
+ g. Coloque a pasta no ar de novo, abra o app e navegue por 3 ou 4 telas. Volte ao "Table Editor":
+    devem aparecer linhas "visita" (1 por aparelho por dia) e "view" (uma por tela aberta).
+ h. Se nada aparecer: abra o app no computador, aperte F12 e veja a aba "Network". Erro 401 ou 403 = chave
+    ou política errada; 404 = nome da tabela ou da função diferente do config.js.
+ Os totais aparecem no rodapé da tela inicial e na tela Sobre.
+ Se você prefere usar uma tabela que já existe, NÃO rode o supabase.sql: me mande as colunas dela.
+
+6) ANÚNCIOS COM IMAGEM
+ Crie/use a pasta anuncios e em index.html, no bloco ADS, use img:"anuncios/nome.jpg".
+ Até 150 KB, largura de 900 a 1200 px. Se a imagem faltar, aparece o bloco de texto.
+
+7) ATUALIZAÇÃO
+ Se mudar index.html ou config.js, troque "topics-v2" em sw.js (ex.: topics-v3) para os celulares
+ receberem a versão nova.
