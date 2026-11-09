@@ -13,6 +13,7 @@ function send(tipo,pagina){
 var cache=null,at=0;
 window.Topics={
  track:function(tipo,pagina){
+  if(ls("topics_ignorar")==="1")return;
   pagina=pagina||"home";
   if(tipo==="view"){
    if(window.gtag)gtag("event","page_view",{page_title:pagina,page_location:location.href.split("#")[0]+"#"+pagina,page_path:"/"+pagina});

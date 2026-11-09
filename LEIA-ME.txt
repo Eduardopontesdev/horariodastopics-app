@@ -15,14 +15,13 @@ ARQUIVOS
  Netlify Drop (app.netlify.com/drop): arraste esta pasta. Ou GitHub Pages / Cloudflare Pages.
  O Blogger não aceita estes arquivos; use um endereço próprio, ex.: app.horariodastopics.com.br.
 
-2) TROCAR O ENDEREÇO (muito importante)
- Os arquivos sitemap.xml, robots.txt, index.html e as páginas horario-*.html usam o endereço
- https://SEU-DOMINIO como exemplo. Me diga o endereço final que eu gero a pasta de novo já certa,
- ou use "localizar e substituir" na pasta inteira trocando https://SEU-DOMINIO pelo seu endereço.
+2) ENDEREÇO
+ O app já está configurado para https://app.horariodastopics.com.br (sitemap, robots, páginas e imagem de compartilhamento).
+ Se mudar de endereço, me avise para eu gerar a pasta de novo.
 
 3) GOOGLE ENCONTRAR
  a. Acesse search.google.com/search-console e adicione o endereço do app.
- b. Envie o sitemap: https://SEU-ENDEREÇO/sitemap.xml
+ b. Envie o sitemap: https://app.horariodastopics.com.br/sitemap.xml
  c. Em "Inspeção de URL", peça a indexação de index.html e de 2 ou 3 páginas de rota.
  d. No seu site (horariodastopics.com.br), coloque um link bem visível para o app. Links de
     sites que o Google já conhece aceleram a descoberta.
@@ -55,10 +54,49 @@ ARQUIVOS
  Os totais aparecem no rodapé da tela inicial e na tela Sobre.
  Se você prefere usar uma tabela que já existe, NÃO rode o supabase.sql: me mande as colunas dela.
 
-6) ANÚNCIOS COM IMAGEM
- Crie/use a pasta anuncios e em index.html, no bloco ADS, use img:"anuncios/nome.jpg".
- Até 150 KB, largura de 900 a 1200 px. Se a imagem faltar, aparece o bloco de texto.
+6) ANÚNCIOS: UMA IMAGEM PARA CADA ESPAÇO
+ Pasta anuncios/ (ao lado do index.html):
+   home.jpg ....... banner da tela inicial (900 x 600 px)
+   tabela.jpg ..... banner no fim das tabelas de horários (1200 x 400 px)
+   mapa.jpg, servicos.jpg ... espaços extras (desligados por padrão)
+ TROCAR A IMAGEM: substitua o arquivo, mantendo o mesmo nome. Se a imagem antiga continuar aparecendo,
+ abra anuncios.json e troque "anuncios/home.jpg" por "anuncios/home.jpg?v=2" (mude o número a cada troca).
+ QUEM RECEBE O CLIQUE: edite anuncios.json (arquivo de texto):
+   id ...... nome curto do anunciante, aparece no painel (ex.: "vmflat")
+   wa ...... WhatsApp com 55 e DDD
+   msg ..... mensagem pronta do WhatsApp
+   ativo ... false esconde o espaço
+ Sem WhatsApp, a imagem leva à tela "Anuncie" com os valores.
+ Um anúncio só para uma rota: crie uma chave como "tabela:cam-gra" (Camocim ➔ Granja) com os mesmos campos. Ids: cam-gra, gra-cam, cam-sob, sob-cam, gra-sob, sob-gra, cam-tia, tia-cam, cam-bar, bar-cam, cam-cha, cha-cam, cam-pre, pre-cam, cam-chp, chp-cam, cam-bit, bit-cam, cam-par, par-cam.
+ Os VALORES da tela Anuncie ficam em index.html, no bloco PRECOS.
+ Cada clique é gravado com espaço e anunciante; os cliques nos cartões de Serviços também.
 
-7) ATUALIZAÇÃO
- Se mudar index.html ou config.js, troque "topics-v2" em sw.js (ex.: topics-v3) para os celulares
- receberem a versão nova.
+7) ATUALIZAÇÕES FUTURAS (o app instalado NÃO precisa ser reinstalado)
+ 1. Altere os arquivos (ou use a pasta nova que eu gerar) e envie para a hospedagem, sobrescrevendo os antigos,
+    no MESMO site e endereço. (Netlify: abra o seu site > Deploys e arraste a pasta de novo. Não use a caixa
+    "Netlify Drop" da página inicial: ela cria um site novo, com outro endereço.)
+ 2. Não é preciso mexer em mais nada. Com internet, o app sempre baixa a versão mais nova ao abrir. Quem deixou o
+    app aberto ou em segundo plano vê o aviso "Nova versão do app disponível" em até 30 minutos ou ao voltar para ele.
+ 3. O aviso detecta mudanças em index.html, config.js e anuncios/anuncios.json (trocar "?v=2" da imagem conta).
+ NÃO MUDE: nomes dos arquivos, name/start_url do manifest.webmanifest e o endereço do site (o celular pode
+   tratar como outro app).
+ SÓ MEXA NO sw.js se adicionar arquivos novos à lista A ou mudar o comportamento dele; nesse caso troque
+   "topics-v4" por "topics-v5" para limpar o cache antigo.
+ ÍCONE: quem já instalou pode levar dias para ver o ícone novo no Android e nunca vê no iPhone; para ver agora,
+   é preciso desinstalar e instalar de novo.
+ Sem internet, o app abre a última versão que a pessoa viu.
+
+8) PAINEL DE CLIQUES E ACESSOS (painel.html)
+ a. Rode o supabase-painel.sql no SQL Editor (antes, crie seu usuário em Authentication > Users e troque
+    SEU-EMAIL@exemplo.com pelo e-mail dele, dentro do arquivo).
+ b. Abra https://app.horariodastopics.com.br/painel.html e entre com esse e-mail e senha.
+ c. Você vê visitas, visualizações, visitantes únicos, cliques por anúncio (com taxa de clique do banner da
+    tela inicial), compartilhamentos por rota, gráfico por dia e os últimos eventos, com download em CSV.
+ d. A página não aparece no Google (noindex) e os dados só saem para o usuário logado.
+ e. No painel, marque "Não contar os acessos deste aparelho" para os seus testes não inflarem os números.
+
+9) O APP NÃO OFERECE INSTALAR?
+ Abra https://app.horariodastopics.com.br/diagnostico.html no celular e mande um print. Ele confere https, manifesto,
+ ícones, service worker e se o navegador liberou a instalação. No iPhone o Safari nunca mostra botão:
+ use Compartilhar > Adicionar à Tela de Início (o app mostra esse aviso sozinho).
+ Todos os arquivos desta pasta precisam ficar juntos (manifest.webmanifest, sw.js, icon-*.png, index.html).

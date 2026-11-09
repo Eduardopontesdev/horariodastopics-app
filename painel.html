@@ -1,0 +1,86 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Painel | Topics de Camocim</title><style>
+:root{--bg:#EEF2F4;--s:#fff;--ink:#14202B;--m:#5B6B78;--l:#D5DDE2;--a:#12806F;--v:#BFD7D2;--y:#F5C400}
+@media(prefers-color-scheme:dark){:root{--bg:#0C141B;--s:#16222D;--ink:#EDF2F5;--m:#93A3AF;--l:#26343F;--a:#3CC3AB;--v:#2A4A47}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:900px;margin:0 auto;padding:16px}h1{margin:6px 0 12px;font-size:24px}h2{font-size:17px;margin:24px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.card{background:var(--s);border:1px solid var(--l);border-radius:12px;padding:12px}
+.card b{display:block;font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}.card span{color:var(--m);font-size:13px}
+.box{background:var(--s);border:1px solid var(--l);border-radius:12px;padding:12px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--l);font-size:14px}th{color:var(--m);font-size:12px;text-transform:uppercase}
+input,select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--l);background:var(--s);color:var(--ink)}
+button{cursor:pointer;font-weight:600}.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.err{color:#C8382E;min-height:20px;margin:8px 0}.mut{color:var(--m);font-size:13px}
+.ax{font-size:11px;fill:var(--m)}svg{width:100%;height:auto;display:block}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px}form{display:grid;gap:10px;max-width:340px}
+</style><script src="config.js"></script></head><body><main>
+<h1>Painel de acessos</h1>
+<section id="login"><p class="mut">Acesso restrito ao administrador.</p><form id="lf"><input id="em" type="email" placeholder="E-mail" autocomplete="username" required><input id="pw" type="password" placeholder="Senha" autocomplete="current-password" required><button class="pri" type="submit">Entrar</button></form></section>
+<div class="err" id="err"></div>
+<section id="dash" hidden>
+<div class="bar"><select id="dd" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select><button id="rf">Atualizar</button><button id="out">Sair</button><span class="mut" id="st"></span></div>
+<div class="cards" id="cards"></div>
+<h2>Por dia <span class="mut lg"><i style="background:var(--v)"></i>visualizações<i style="background:var(--a)"></i>visitas</span></h2><div class="box" id="graf"></div>
+<h2>Telas e rotas mais vistas</h2><div class="box" id="pag"></div>
+<h2>Cliques nos anúncios</h2><div class="box" id="ads"></div><p class="mut">A taxa de clique do banner da tela inicial usa as visualizações da tela inicial. Anúncio sem WhatsApp não gera clique.</p>
+<h2>Cliques nos serviços</h2><div class="box" id="svs"></div>
+<h2>Compartilhamentos</h2><div class="box" id="shr"></div>
+<h2>Últimos eventos (até 300)</h2><div class="bar"><select id="ft" aria-label="Filtrar tipo"><option value="">Todos</option><option value="visita">Visitas</option><option value="view">Visualizações</option><option value="clique">Cliques</option><option value="compartilhar">Compartilhamentos</option></select><button id="csv">Baixar CSV</button></div><div class="box" id="evt"></div>
+<h2>Meus testes</h2><label><input type="checkbox" id="ig"> Não contar os acessos deste aparelho</label><p class="mut">Marque no seu celular e no computador para os seus testes não inflarem os números.</p>
+</section></main><script>
+var C=window.TOPICS_CFG||{},SB=C.sb||{},NAMES={"cam-gra": "Camocim ➔ Granja", "cam-sob": "Camocim ➔ Sobral", "cam-tia": "Camocim ➔ Tianguá", "cam-bar": "Camocim ➔ Barroquinha", "cam-cha": "Camocim ➔ Chaval", "cam-pre": "Camocim ➔ Preá", "cam-chp": "Camocim ➔ Chapada", "cam-bit": "Camocim ➔ Bitupitá", "cam-par": "Camocim ➔ Parnaíba", "gra-cam": "Granja ➔ Camocim", "sob-cam": "Sobral ➔ Camocim", "tia-cam": "Tianguá ➔ Camocim", "bar-cam": "Barroquinha ➔ Camocim", "cha-cam": "Chaval ➔ Camocim", "pre-cam": "Preá ➔ Camocim", "chp-cam": "Chapada ➔ Camocim", "bit-cam": "Bitupitá ➔ Camocim", "par-cam": "Parnaíba ➔ Camocim", "gra-sob": "Granja ➔ Sobral", "sob-gra": "Sobral ➔ Granja"};
+var NOME={home:"Tela inicial",servicos:"Serviços",sobre:"Sobre o app",anuncie:"Anuncie (valores)"};
+var SLOT={home:"Banner da tela inicial",tabela:"Final das tabelas",mapa:"Aba Mapa",servicos:"Tela de Serviços"};
+var ADN={"anuncio-home":"Banner da tela inicial","anuncio-tabela":"Anúncio das tabelas","anuncio-mapa":"Anúncio da aba Mapa","anuncio-servicos":"Anúncio de Serviços"};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function nome(p){p=String(p==null?"":p);if(p.indexOf("mapa:")===0)return"Mapa · "+nome(p.slice(5));if(p.indexOf("servico:")===0)return"Serviço · "+p.slice(8);return NAMES[p]||NOME[p]||p}
+function rot(p){p=String(p==null?"":p);if(p.indexOf("anuncio-")===0){var m=p.slice(8).split(":");return"Anúncio · "+(SLOT[m[0]]||m[0])+(m[1]?" ("+m[1]+")":"")}if(p==="contratar")return"Clique em Quero anunciar";return nome(p)}
+function S(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){return null}}
+var tok=S("pt_tok"),exp=+S("pt_exp")||0,dias=30,eventos=[];
+function hdr(a){var h={apikey:SB.key,"Content-Type":"application/json"};if(a)h.Authorization="Bearer "+tok;return h}
+function sair(){tok=null;S("pt_tok",null);S("pt_exp",null);$("dash").hidden=true;$("login").hidden=false}
+function login(e){e.preventDefault();$("err").textContent="";
+ fetch(SB.url+"/auth/v1/token?grant_type=password",{method:"POST",headers:hdr(false),body:JSON.stringify({email:$("em").value.trim(),password:$("pw").value})})
+ .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})
+ .then(function(x){if(!x.ok||!x.j.access_token){$("err").textContent="E-mail ou senha incorretos.";return}
+  tok=x.j.access_token;exp=Date.now()+(x.j.expires_in||3600)*1000-60000;S("pt_tok",tok);S("pt_exp",String(exp));$("pw").value="";abrir()})
+ .catch(function(){$("err").textContent="Não foi possível conectar. Confira url e key no config.js."})}
+function rpc(n,b){return fetch(SB.url+"/rest/v1/rpc/"+n,{method:"POST",headers:hdr(true),body:JSON.stringify(b)}).then(function(r){if(!r.ok)throw{s:r.status};return r.json()})}
+function abrir(){if(!tok||Date.now()>exp){sair();return}
+ $("login").hidden=true;$("dash").hidden=false;$("st").textContent="Carregando...";
+ Promise.all([rpc("topics_painel",{dias:dias}),rpc("topics_eventos",{limite:300})]).then(function(r){desenhar(r[0]||{},r[1]||[]);$("st").textContent="Atualizado às "+new Date().toLocaleTimeString("pt-BR")})
+ .catch(function(e){var s=e&&e.s;if(s===401){sair();$("err").textContent="Sessão expirada. Entre de novo."}
+  else if(s===403||s===404||s===400)$("st").textContent="Sem permissão ou funções não encontradas ("+s+"). Rode o supabase-painel.sql com o seu e-mail.";
+  else $("st").textContent="Não foi possível carregar os dados."})}
+function n(v){return(+v||0).toLocaleString("pt-BR")}
+function tab(cab,l){return"<table><thead><tr>"+cab.map(function(c){return"<th>"+c+"</th>"}).join("")+"</tr></thead><tbody>"+(l.length?l.join(""):'<tr><td colspan="'+cab.length+'">Sem dados no período.</td></tr>')+"</tbody></table>"}
+function grafico(por){var m={},ds=[],i,mx=1;(por||[]).forEach(function(x){m[x.dia]=x});
+ for(i=dias-1;i>=0;i--)ds.push(new Date(Date.now()-i*864e5).toLocaleDateString("sv-SE",{timeZone:"America/Fortaleza"}));
+ ds.forEach(function(d){var v=m[d]?+m[d].views:0;if(v>mx)mx=v});
+ var W=600,H=170,bw=W/ds.length,s='<svg viewBox="0 0 '+W+" "+(H+22)+'" role="img" aria-label="Visualizações e visitas por dia">';
+ ds.forEach(function(d,k){var x=m[d]||{},v=+x.views||0,vi=+x.visitas||0,hv=v/mx*H,hi=vi/mx*H,t=esc(d.split("-").reverse().join("/"))+": "+v+" visualizações, "+vi+" visitas";
+  s+="<g><title>"+t+'</title><rect x="'+(k*bw+1)+'" y="'+(H-hv)+'" width="'+Math.max(bw-2,1)+'" height="'+hv+'" fill="var(--v)"/><rect x="'+(k*bw+1)+'" y="'+(H-hi)+'" width="'+Math.max(bw-2,1)+'" height="'+hi+'" fill="var(--a)"/></g>'});
+ var f=function(d){return d.split("-").reverse().slice(0,2).join("/")};
+ return s+'<text x="0" y="'+(H+16)+'" class="ax">'+f(ds[0])+'</text><text x="'+W+'" y="'+(H+16)+'" text-anchor="end" class="ax">'+f(ds[ds.length-1])+"</text></svg>"}
+function desenhar(p,ev){var t=p.totais||{};eventos=ev;var cl=p.anuncios||[],ads=[],svs=[],ct=0;cl.forEach(function(x){var k=String(x.pagina||"");if(k.indexOf("anuncio-")===0)ads.push(x);else if(k.indexOf("servico:")===0)svs.push(x);else if(k==="contratar")ct+=+x.cliques||0});var soma=function(a){return a.reduce(function(s,x){return s+(+x.cliques||0)},0)};
+ $("cards").innerHTML=[["Visitas",t.visitas],["Visualizações",t.views],["Visitantes únicos",t.visitantes],["Cliques em anúncios",soma(ads)],["Cliques em serviços",soma(svs)],["Quero anunciar",ct],["Compartilhamentos",t.compartilhamentos]].map(function(c){return'<div class="card"><b>'+n(c[1])+"</b><span>"+c[0]+"</span></div>"}).join("");
+ $("graf").innerHTML=grafico(p.por_dia);
+ var pg=p.paginas||[],home=0;pg.forEach(function(x){if(x.pagina==="home")home=+x.views});
+ $("pag").innerHTML=tab(["Tela / rota","Visualizações"],pg.map(function(x){return"<tr><td>"+esc(nome(x.pagina))+"</td><td>"+n(x.views)+"</td></tr>"}));
+ $("ads").innerHTML=tab(["Espaço","Anunciante","Cliques","Taxa de clique"],ads.map(function(x){var m=String(x.pagina).slice(8).split(":"),ctr=m[0]==="home"&&home?(x.cliques/home*100).toFixed(1).replace(".",",")+"%":"–";return"<tr><td>"+esc(SLOT[m[0]]||m[0])+"</td><td>"+esc(m[1]||"–")+"</td><td>"+n(x.cliques)+"</td><td>"+ctr+"</td></tr>"}));
+ $("svs").innerHTML=tab(["Serviço","Cliques no WhatsApp"],svs.map(function(x){return"<tr><td>"+esc(String(x.pagina).slice(8))+"</td><td>"+n(x.cliques)+"</td></tr>"}));
+ $("shr").innerHTML=tab(["Rota","Compartilhamentos"],(p.compartilhados||[]).map(function(x){return"<tr><td>"+esc(nome(x.pagina))+"</td><td>"+n(x.total)+"</td></tr>"}));
+ lista()}
+function lista(){var f=$("ft").value,l=eventos.filter(function(e){return!f||e.tipo===f});
+ $("evt").innerHTML=tab(["Data e hora","Tipo","Tela / anúncio","Aparelho"],l.map(function(e){return"<tr><td>"+esc(new Date(e.criado_em).toLocaleString("pt-BR",{timeZone:"America/Fortaleza"}))+"</td><td>"+esc(e.tipo)+"</td><td>"+esc(rot(e.pagina))+"</td><td>"+esc(e.uid)+"</td></tr>"}))}
+function csv(){var rows=[["data_hora","tipo","pagina","aparelho"]].concat(eventos.map(function(e){return[new Date(e.criado_em).toLocaleString("pt-BR",{timeZone:"America/Fortaleza"}),e.tipo,e.pagina,e.uid]}));
+ var txt="\ufeff"+rows.map(function(r){return r.map(function(c){c=String(c==null?"":c);if(/^[=+\-@]/.test(c))c="'"+c;return'"'+c.replace(/"/g,'""')+'"'}).join(";")}).join("\r\n");
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/csv;charset=utf-8"}));a.download="eventos-topics.csv";a.click()}
+if(typeof document!=="undefined"&&document.getElementById("login")){
+ if(!SB.url||!SB.key)$("err").textContent="Preencha sb.url e sb.key no config.js.";
+ $("lf").onsubmit=login;$("out").onclick=sair;$("rf").onclick=abrir;$("csv").onclick=csv;$("ft").onchange=lista;
+ $("dd").onchange=function(){dias=+this.value;abrir()};
+ try{$("ig").checked=localStorage.getItem("topics_ignorar")==="1"}catch(e){}
+ $("ig").onchange=function(){try{this.checked?localStorage.setItem("topics_ignorar","1"):localStorage.removeItem("topics_ignorar")}catch(e){}};
+ if(tok&&Date.now()<exp)abrir()}
+</script></body></html>

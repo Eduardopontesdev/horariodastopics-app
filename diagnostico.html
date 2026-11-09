@@ -1,0 +1,19 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><title>Diagnóstico de instalação</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:0 auto;padding:16px}li{margin:8px 0;list-style:none}ul{padding:0}small{color:#5B6B78;display:block}h1{font-size:22px}</style></head><body>
+<h1>Diagnóstico: o app pode ser instalado?</h1><p>Abra esta página no celular, no mesmo navegador onde o app não oferece a instalação, e me mande um print.</p><ul id="r"></ul>
+<script>
+var L=document.getElementById("r");function add(o,m,d){L.insertAdjacentHTML("beforeend","<li>"+(o===null?"ℹ️ ":o?"✅ ":"❌ ")+m+(d?"<small>"+d+"</small>":"")+"</li>")}
+add(location.protocol==="https:"||location.hostname==="localhost","Endereço com https",location.href);
+add(null,"Navegador",navigator.userAgent+(/iphone|ipad/i.test(navigator.userAgent)?" — No iPhone/iPad não existe botão automático: use Compartilhar > Adicionar à Tela de Início, no Safari.":""));
+add(null,"Já aberto como app instalado?",String((window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone));
+fetch("manifest.webmanifest").then(function(r){add(r.ok,"manifest.webmanifest encontrado (HTTP "+r.status+")",r.headers.get("content-type")||"");return r.ok?r.json():null}).then(function(m){
+ if(!m)return;add(!!(m.name||m.short_name),"Manifesto tem nome: "+(m.name||m.short_name||"-"));add(!!m.start_url,"start_url: "+m.start_url);add(m.display==="standalone"||m.display==="fullscreen"||m.display==="minimal-ui","display: "+m.display);
+ var ic=m.icons||[];var s=ic.map(function(i){return i.sizes}).join(", ");add(/192x192/.test(s)&&/512x512/.test(s),"Ícones 192 e 512 declarados ("+s+")");
+ ic.forEach(function(i){fetch(i.src).then(function(r){var t=r.headers.get("content-type")||"";add(r.ok&&/image/.test(t),"Ícone "+i.src+" abre (HTTP "+r.status+")",t)}).catch(function(){add(false,"Ícone "+i.src+" não abriu")})})
+}).catch(function(){add(false,"Não consegui ler o manifest.webmanifest (arquivo ausente ou fora do formato)")});
+fetch("index.html").then(function(r){return r.text()}).then(function(t){add(/rel="manifest"/.test(t),"index.html tem a linha do manifesto")}).catch(function(){});
+fetch("sw.js").then(function(r){add(r.ok&&/javascript/.test(r.headers.get("content-type")||""),"sw.js encontrado e servido como JavaScript (HTTP "+r.status+")",r.headers.get("content-type")||"")});
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").then(function(){return navigator.serviceWorker.ready}).then(function(g){add(true,"Service worker ativo","escopo: "+g.scope)}).catch(function(e){add(false,"Service worker não registrou",String(e))})}else add(false,"Este navegador não tem service worker");
+var got=false;addEventListener("beforeinstallprompt",function(e){got=true;e.preventDefault();add(true,"O navegador liberou a instalação (o app é instalável!)")});
+setTimeout(function(){if(!got)add(null,"O navegador não liberou o botão de instalar","Se tudo acima está ✅, o motivo costuma ser: app já instalado, aba anônima, navegador sem suporte (ex.: Firefox/iPhone) ou o Chrome ainda está avaliando. Tente de novo em alguns minutos e use o menu ⋮ do Chrome.")},5000);
+</script></body></html>
