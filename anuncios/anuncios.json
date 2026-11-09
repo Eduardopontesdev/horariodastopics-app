@@ -1,0 +1,35 @@
+{
+ "home": {
+  "id": "vmflat",
+  "t": "VM Flat Residence",
+  "d": "Hospedagem no centro de Camocim.",
+  "wa": "5588993804666",
+  "msg": "Olá, vi o anúncio do VM Flat Residence no app das Topics.",
+  "img": "anuncios/home.jpg",
+  "ativo": true
+ },
+ "tabela": {
+  "id": "",
+  "t": "Seu anúncio aqui",
+  "d": "Apareça para quem consulta os horários.",
+  "wa": "",
+  "img": "anuncios/tabela.jpg",
+  "ativo": true
+ },
+ "mapa": {
+  "id": "",
+  "t": "Seu anúncio aqui",
+  "d": "Apareça para quem vai ao embarque.",
+  "wa": "",
+  "img": "anuncios/mapa.jpg",
+  "ativo": false
+ },
+ "servicos": {
+  "id": "",
+  "t": "Seu anúncio aqui",
+  "d": "Apareça para quem procura serviços.",
+  "wa": "",
+  "img": "anuncios/servicos.jpg",
+  "ativo": false
+ }
+}
