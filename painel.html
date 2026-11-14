@@ -10,7 +10,7 @@ table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,t
 input,select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--l);background:var(--s);color:var(--ink)}
 button{cursor:pointer;font-weight:600}.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.err{color:#C8382E;min-height:20px;margin:8px 0}.mut{color:var(--m);font-size:13px}
-.ax{font-size:11px;fill:var(--m)}svg{width:100%;height:auto;display:block}
+.ax{font-size:11px;fill:var(--m)}em{font-style:normal;font-weight:700}.card em{display:block;font-size:12px;margin-top:4px}.up{color:var(--a)}.dn{color:#E0443A}.fl{color:var(--m);font-weight:600}svg{width:100%;height:auto;display:block}
 .lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px}form{display:grid;gap:10px;max-width:340px}
 </style><script src="config.js"></script></head><body><main>
 <h1>Painel de acessos</h1>
@@ -18,9 +18,12 @@ button{cursor:pointer;font-weight:600}.pri{background:var(--ink);color:var(--bg)
 <div class="err" id="err"></div>
 <section id="dash" hidden>
 <div class="bar"><select id="dd" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select><button id="rf">Atualizar</button><button id="out">Sair</button><span class="mut" id="st"></span></div>
-<div class="cards" id="cards"></div>
+<div class="cards" id="cards"></div><p class="mut">As setas comparam com o período anterior do mesmo tamanho (por exemplo, os últimos 30 dias contra os 30 dias antes deles).</p>
+<h2>Crescimento</h2><div class="box" id="cre"></div>
 <h2>Por dia <span class="mut lg"><i style="background:var(--v)"></i>visualizações<i style="background:var(--a)"></i>visitas</span></h2><div class="box" id="graf"></div>
 <h2>Telas e rotas mais vistas</h2><div class="box" id="pag"></div>
+<h2>De onde vêm os acessos</h2><div class="box" id="ori"></div><p class="mut">Conta 1 por aparelho por dia. "Direto" inclui links abertos no WhatsApp e quem digita o endereço. A cidade de quem acessa aparece no Google Analytics (Relatórios &gt; Dados demográficos).</p>
+<h2>Aparelhos</h2><div class="box" id="dsp"></div>
 <h2>Cliques nos anúncios</h2><div class="box" id="ads"></div><p class="mut">A taxa de clique do banner da tela inicial usa as visualizações da tela inicial. Anúncio sem WhatsApp não gera clique.</p>
 <h2>Cliques nos serviços</h2><div class="box" id="svs"></div>
 <h2>Compartilhamentos</h2><div class="box" id="shr"></div>
@@ -48,11 +51,22 @@ function login(e){e.preventDefault();$("err").textContent="";
 function rpc(n,b){return fetch(SB.url+"/rest/v1/rpc/"+n,{method:"POST",headers:hdr(true),body:JSON.stringify(b)}).then(function(r){if(!r.ok)throw{s:r.status};return r.json()})}
 function abrir(){if(!tok||Date.now()>exp){sair();return}
  $("login").hidden=true;$("dash").hidden=false;$("st").textContent="Carregando...";
- Promise.all([rpc("topics_painel",{dias:dias}),rpc("topics_eventos",{limite:300})]).then(function(r){desenhar(r[0]||{},r[1]||[]);$("st").textContent="Atualizado às "+new Date().toLocaleTimeString("pt-BR")})
+ Promise.all([rpc("topics_painel",{dias:dias}),rpc("topics_eventos",{limite:300}),rpc("topics_crescimento",{}).catch(function(){return null})]).then(function(r){desenhar(r[0]||{},r[1]||[],r[2]);$("st").textContent="Atualizado às "+new Date().toLocaleTimeString("pt-BR")})
  .catch(function(e){var s=e&&e.s;if(s===401){sair();$("err").textContent="Sessão expirada. Entre de novo."}
   else if(s===403||s===404||s===400)$("st").textContent="Sem permissão ou funções não encontradas ("+s+"). Rode o supabase-painel.sql com o seu e-mail.";
   else $("st").textContent="Não foi possível carregar os dados."})}
 function n(v){return(+v||0).toLocaleString("pt-BR")}
+function delta(a,b){a=+a||0;b=+b||0;if(b===0){return a===0?'<em class="fl">– sem variação</em>':'<em class="up">▲ novo</em>'}
+ var p=Math.round((a-b)/b*100);if(p===0){return'<em class="fl">– igual ao período anterior</em>'}
+ return'<em class="'+(p>0?"up":"dn")+'">'+(p>0?"▲ +":"▼ −")+Math.abs(p)+"%</em>"}
+function crescimento(cr){var el=$("cre");
+ if(!cr){el.innerHTML='<p class="mut">Para ver o crescimento, rode o arquivo supabase-atualizacao-painel-v2.sql no Supabase.</p>';return}
+ var M=[["Visitas","visitas"],["Visualizações","views"],["Visitantes únicos","visitantes"],["Cliques (total)","cliques"],["Compartilhamentos","compartilhamentos"]],s=cr.sete||{},t=cr.trinta||{};
+ el.innerHTML=tab(["","Últimos 7 dias","Contra os 7 anteriores","Últimos 30 dias","Contra os 30 anteriores"],M.map(function(m){var a=s.atual||{},b=s.anterior||{},c=t.atual||{},d=t.anterior||{};
+  return"<tr><td>"+m[0]+"</td><td>"+n(a[m[1]])+"</td><td>"+delta(a[m[1]],b[m[1]])+"</td><td>"+n(c[m[1]])+"</td><td>"+delta(c[m[1]],d[m[1]])+"</td></tr>"}))}
+function distrib(l,cab){var t=0;l.forEach(function(x){t+=+x.visitas||0});return tab([cab,"Visitas","%"],l.map(function(x){var v=+x.visitas||0;return"<tr><td>"+esc(x.nome)+"</td><td>"+n(v)+"</td><td>"+(t?Math.round(v/t*100):0)+"%</td></tr>"}))}
+function origem(p){var m='<p class="mut">Para ver origem e aparelho, rode o supabase-atualizacao-painel-v2.sql e publique o tracker.js novo.</p>';
+ $("ori").innerHTML=p.origens?distrib(p.origens,"Origem"):m;$("dsp").innerHTML=p.dispositivos?distrib(p.dispositivos,"Aparelho"):m}
 function tab(cab,l){return"<table><thead><tr>"+cab.map(function(c){return"<th>"+c+"</th>"}).join("")+"</tr></thead><tbody>"+(l.length?l.join(""):'<tr><td colspan="'+cab.length+'">Sem dados no período.</td></tr>')+"</tbody></table>"}
 function grafico(por){var m={},ds=[],i,mx=1;(por||[]).forEach(function(x){m[x.dia]=x});
  for(i=dias-1;i>=0;i--)ds.push(new Date(Date.now()-i*864e5).toLocaleDateString("sv-SE",{timeZone:"America/Fortaleza"}));
@@ -62,15 +76,14 @@ function grafico(por){var m={},ds=[],i,mx=1;(por||[]).forEach(function(x){m[x.di
   s+="<g><title>"+t+'</title><rect x="'+(k*bw+1)+'" y="'+(H-hv)+'" width="'+Math.max(bw-2,1)+'" height="'+hv+'" fill="var(--v)"/><rect x="'+(k*bw+1)+'" y="'+(H-hi)+'" width="'+Math.max(bw-2,1)+'" height="'+hi+'" fill="var(--a)"/></g>'});
  var f=function(d){return d.split("-").reverse().slice(0,2).join("/")};
  return s+'<text x="0" y="'+(H+16)+'" class="ax">'+f(ds[0])+'</text><text x="'+W+'" y="'+(H+16)+'" text-anchor="end" class="ax">'+f(ds[ds.length-1])+"</text></svg>"}
-function desenhar(p,ev){var t=p.totais||{};eventos=ev;var cl=p.anuncios||[],ads=[],svs=[],ct=0;cl.forEach(function(x){var k=String(x.pagina||"");if(k.indexOf("anuncio-")===0)ads.push(x);else if(k.indexOf("servico:")===0)svs.push(x);else if(k==="contratar")ct+=+x.cliques||0});var soma=function(a){return a.reduce(function(s,x){return s+(+x.cliques||0)},0)};
- $("cards").innerHTML=[["Visitas",t.visitas],["Visualizações",t.views],["Visitantes únicos",t.visitantes],["Cliques em anúncios",soma(ads)],["Cliques em serviços",soma(svs)],["Quero anunciar",ct],["Compartilhamentos",t.compartilhamentos]].map(function(c){return'<div class="card"><b>'+n(c[1])+"</b><span>"+c[0]+"</span></div>"}).join("");
+function desenhar(p,ev,cr){var t=p.totais||{};eventos=ev;var cl=p.anuncios||[],ads=[],svs=[],ct=0;cl.forEach(function(x){var k=String(x.pagina||"");if(k.indexOf("anuncio-")===0)ads.push(x);else if(k.indexOf("servico:")===0)svs.push(x);else if(k==="contratar")ct+=+x.cliques||0});var soma=function(a){return a.reduce(function(s,x){return s+(+x.cliques||0)},0)};
+ $("cards").innerHTML=[["Visitas",t.visitas,"visitas"],["Visualizações",t.views,"views"],["Visitantes únicos",t.visitantes,"visitantes"],["Cliques em anúncios",soma(ads)],["Cliques em serviços",soma(svs)],["Quero anunciar",ct],["Compartilhamentos",t.compartilhamentos,"compartilhamentos"]].map(function(c){return'<div class="card"><b>'+n(c[1])+"</b><span>"+c[0]+"</span>"+(c[2]&&p.anterior?delta(c[1],p.anterior[c[2]]):"")+"</div>"}).join("");
  $("graf").innerHTML=grafico(p.por_dia);
  var pg=p.paginas||[],home=0;pg.forEach(function(x){if(x.pagina==="home")home=+x.views});
  $("pag").innerHTML=tab(["Tela / rota","Visualizações"],pg.map(function(x){return"<tr><td>"+esc(nome(x.pagina))+"</td><td>"+n(x.views)+"</td></tr>"}));
  $("ads").innerHTML=tab(["Espaço","Anunciante","Cliques","Taxa de clique"],ads.map(function(x){var m=String(x.pagina).slice(8).split(":"),ctr=m[0]==="home"&&home?(x.cliques/home*100).toFixed(1).replace(".",",")+"%":"–";return"<tr><td>"+esc(SLOT[m[0]]||m[0])+"</td><td>"+esc(m[1]||"–")+"</td><td>"+n(x.cliques)+"</td><td>"+ctr+"</td></tr>"}));
  $("svs").innerHTML=tab(["Serviço","Cliques no WhatsApp"],svs.map(function(x){return"<tr><td>"+esc(String(x.pagina).slice(8))+"</td><td>"+n(x.cliques)+"</td></tr>"}));
- $("shr").innerHTML=tab(["Rota","Compartilhamentos"],(p.compartilhados||[]).map(function(x){return"<tr><td>"+esc(nome(x.pagina))+"</td><td>"+n(x.total)+"</td></tr>"}));
- lista()}
+ $("shr").innerHTML=tab(["Rota","Compartilhamentos"],(p.compartilhados||[]).map(function(x){return"<tr><td>"+esc(nome(x.pagina))+"</td><td>"+n(x.total)+"</td></tr>"})); crescimento(cr);origem(p);lista()}
 function lista(){var f=$("ft").value,l=eventos.filter(function(e){return!f||e.tipo===f});
  $("evt").innerHTML=tab(["Data e hora","Tipo","Tela / anúncio","Aparelho"],l.map(function(e){return"<tr><td>"+esc(new Date(e.criado_em).toLocaleString("pt-BR",{timeZone:"America/Fortaleza"}))+"</td><td>"+esc(e.tipo)+"</td><td>"+esc(rot(e.pagina))+"</td><td>"+esc(e.uid)+"</td></tr>"}))}
 function csv(){var rows=[["data_hora","tipo","pagina","aparelho"]].concat(eventos.map(function(e){return[new Date(e.criado_em).toLocaleString("pt-BR",{timeZone:"America/Fortaleza"}),e.tipo,e.pagina,e.uid]}));
