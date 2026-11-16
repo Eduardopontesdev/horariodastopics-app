@@ -1,0 +1,174 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Post para Instagram | Topics de Camocim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF2F4;--s:#fff;--ink:#14202B;--m:#5B6B78;--l:#D5DDE2;--a:#12806F;--v:#BFD7D2;--y:#F5C400}
+@media(prefers-color-scheme:dark){:root{--bg:#0C141B;--s:#16222D;--ink:#EDF2F5;--m:#93A3AF;--l:#26343F;--a:#3CC3AB;--v:#2A4A47}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:900px;margin:0 auto;padding:16px}h1{margin:6px 0 12px;font-size:24px}h2{font-size:17px;margin:24px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.card{background:var(--s);border:1px solid var(--l);border-radius:12px;padding:12px}
+.card b{display:block;font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}.card span{color:var(--m);font-size:13px}
+.box{background:var(--s);border:1px solid var(--l);border-radius:12px;padding:12px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--l);font-size:14px}th{color:var(--m);font-size:12px;text-transform:uppercase}
+input,select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--l);background:var(--s);color:var(--ink)}
+button{cursor:pointer;font-weight:600}.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.err{color:#C8382E;min-height:20px;margin:8px 0}.mut{color:var(--m);font-size:13px}
+.ax{font-size:11px;fill:var(--m)}svg{width:100%;height:auto;display:block}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px}form{display:grid;gap:10px;max-width:340px}
+
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:8px 0}label{display:block;font-size:13px;color:var(--m);margin-bottom:4px}label.ck{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:15px;margin:0}
+input[type=text],select,textarea{width:100%}input[type=checkbox]{width:auto}textarea{min-height:300px;line-height:1.45;font-size:15px;padding:12px;border-radius:12px;border:1px solid var(--l);background:var(--s);color:var(--ink);font-family:inherit}
+.slides{display:flex;gap:12px;overflow-x:auto;padding:8px 0 14px}.slide{flex:none;width:min(74vw,290px);display:flex;flex-direction:column;gap:6px}.slide canvas{width:100%;height:auto;border-radius:12px;border:1px solid var(--l)}
+.dn{color:#E0443A;font-size:13px}.lnk{padding:10px 12px;border:1px solid var(--l);border-radius:10px;background:var(--s);color:var(--ink);text-decoration:none;font-weight:600}
+</style><script src="config.js"></script></head><body><main>
+<h1>Post para Instagram</h1>
+<section id="login"><p class="mut">Acesso restrito ao administrador (o mesmo login do painel).</p><form id="lf"><input id="em" type="email" placeholder="E-mail" autocomplete="username" required><input id="pw" type="password" placeholder="Senha" autocomplete="current-password" required><button class="pri" type="submit">Entrar</button></form></section>
+<div class="err" id="err"></div>
+<section id="app" hidden>
+<div class="bar"><a class="lnk" href="painel.html">‹ Painel</a><button id="out">Sair</button></div>
+<div class="row"><div><label for="rota">Rota</label><select id="rota"></select></div><div><label for="fmt">Formato</label><select id="fmt"></select></div><div><label for="est">Legenda</label><select id="est"><option value="completa">Completa</option><option value="curta">Curta</option></select></div></div>
+<div class="row"><div><label for="upd">Texto de atualização (aparece na capa)</label><input type="text" id="upd"></div><div><label for="hd">Seu @ no Instagram (opcional)</label><input type="text" id="hd" placeholder="@seuperfil"></div><div><label for="nt">Hashtags: <b id="ntv">8</b></label><input type="range" id="nt" min="3" max="20" value="8"></div></div>
+<div class="row"><label class="ck"><input type="checkbox" id="dsem" checked> Segunda a sexta</label><label class="ck"><input type="checkbox" id="dsab" checked> Sábado</label><label class="ck"><input type="checkbox" id="ddom" checked> Domingo</label><label class="ck"><input type="checkbox" id="cta" checked> Imagem final "link na bio"</label></div>
+<div class="bar"><button class="pri" id="gb">Gerar de novo</button><span class="mut" id="q"></span></div>
+<h2>Imagens do carrossel</h2><div class="slides" id="slides"></div>
+<div class="bar"><button class="pri" id="bt">Baixar todas (zip)</button><button id="sh">Compartilhar (celular)</button></div>
+<h2>Legenda</h2><textarea id="cap"></textarea><div class="bar"><button class="pri" id="cp">Copiar legenda</button><span id="cnt" class="mut"></span></div>
+<p class="mut">Como postar: abra o Instagram, toque em +, escolha as imagens na ordem (até 20), cole a legenda e publique. O Instagram não deixa postar direto por um site, então o último passo é manual. O link da legenda não fica clicável: por isso a frase "link na bio" (coloque o endereço do app na sua bio). Esta página é só uma tela de acesso: os horários dela já são públicos no app.</p>
+</section></main><script>
+var C=window.TOPICS_CFG||{},SB=C.sb||{},R=[{"id":"cam-gra","o":"Camocim","d":"Granja","price":"R$ 7,45","dur":40,"fim":null,"paradas":null,"st":null,"times":{"sem":["06:30","06:45","07:05","07:25","07:45","08:05","08:25","08:45","09:05","09:25","09:45","10:05","10:25","10:45","11:05","11:25","11:45","12:05","12:25","12:45","13:10","13:35","14:00","14:25","14:50","15:15","15:40","16:05","16:30","16:55","17:20","17:45","18:10","18:45"],"sab":["06:30","06:45","07:05","07:25","07:45","08:05","08:25","08:45","09:05","09:25","09:45","10:05","10:25","10:45","11:05","11:25","11:45","12:05","12:25","12:45","13:10","13:35","14:00","14:25","14:50","15:15","15:40","16:05","16:30","16:55","17:20","17:45","18:10","18:45"],"dom":["09:00","11:00","13:00","15:00","17:00","17:45"]},"upd":null},{"id":"cam-sob","o":"Camocim","d":"Sobral","price":"R$ 38,10","dur":150,"fim":"Sobral","paradas":[["Martinópole",60],["Uruoca",90],["Senador Sá",105],["Massapê",120]],"st":null,"times":{"sem":["03:30","05:00","07:00","09:00","11:00","13:00","15:00"],"sab":["03:30","05:00","07:00","09:00","11:00","13:00","15:00"],"dom":["04:30","07:00","15:00"]},"upd":null},{"id":"cam-tia","o":"Camocim","d":"Tianguá","price":"R$ 35,90","dur":195,"fim":"Tianguá","paradas":[["Santa Terezinha",0],["Viçosa",0]],"st":{"05:45":["07:00","08:20","09:00"],"10:05":["11:20","12:40","13:15"]},"times":{"sem":["05:45","10:05"],"sab":["05:45","10:05"],"dom":[]},"upd":null},{"id":"cam-bar","o":"Camocim","d":"Barroquinha","price":"R$ 11,20","dur":50,"fim":null,"paradas":null,"st":{"08:20":["09:30"]},"times":{"sem":["07:10","08:20","08:50","09:20","10:20","11:20","12:10","13:00","14:00","15:50","18:00"],"sab":["08:15","09:40","11:00","12:50","14:30","18:00"],"dom":["09:30"]},"upd":null},{"id":"cam-cha","o":"Camocim","d":"Chaval","price":"R$ 14,95","dur":60,"fim":null,"paradas":null,"st":null,"times":{"sem":["07:50","09:50","10:50","11:40","14:30","16:30"],"sab":["11:30"],"dom":[]},"upd":null},{"id":"cam-pre","o":"Camocim","d":"Preá","price":"R$ 29,75","dur":150,"fim":"Preá","paradas":[["Granja",40],["Parazinho",75],["Jijoca",105]],"st":null,"times":{"sem":["05:00","06:00","07:00","08:15","09:30","10:45","12:00","13:15","14:30","15:45","17:00","18:00"],"sab":["05:00","06:00","07:00","08:15","09:30","10:45","12:00","13:15","14:30","15:45","17:00","18:00"],"dom":["05:00","07:00","09:30","12:00","14:30","17:00"]},"upd":null},{"id":"cam-chp","o":"Camocim","d":"Chapada","price":"R$ 19,10","dur":85,"fim":"Chapada","paradas":[["Barroquinha",40],["Araras",65]],"st":null,"times":{"sem":["11:00"],"sab":[],"dom":[]},"upd":null},{"id":"cam-bit","o":"Camocim","d":"Bitupitá","price":"R$ 19,10","dur":75,"fim":"Bitupitá","paradas":[["Barroquinha",0]],"st":{"10:40":["11:20","11:55"],"11:30":["12:10","12:45"],"12:40":["13:20","13:55"],"16:10":["16:50","17:55"],"11:20":["12:00","12:40"]},"times":{"sem":["10:40","11:30","12:40","16:10"],"sab":["11:20"],"dom":[]},"upd":null},{"id":"cam-par","o":"Camocim","d":"Parnaíba","price":"R$ 45,00","dur":120,"fim":null,"paradas":null,"st":null,"times":{"sem":["08:30"],"sab":["08:30"],"dom":[]},"upd":null},{"id":"gra-cam","o":"Granja","d":"Camocim","price":"R$ 7,45","dur":40,"fim":null,"paradas":null,"st":null,"times":{"sem":["05:45","06:00","06:20","06:40","07:00","07:20","07:40","08:00","08:20","08:40","09:00","09:20","09:40","10:00","10:20","10:40","11:00","11:20","11:40","12:00","12:25","12:50","13:15","13:40","14:05","14:30","14:55","15:20","15:45","16:10","16:35","17:00","17:25","18:00"],"sab":["05:45","06:00","06:20","06:40","07:00","07:20","07:40","08:00","08:20","08:40","09:00","09:20","09:40","10:00","10:20","10:40","11:00","11:20","11:40","12:00","12:25","12:50","13:15","13:40","14:05","14:30","14:55","15:20","15:45","16:10","16:35","17:00","17:25","18:00"],"dom":["07:00","09:00","11:00","13:00","15:00","17:00"]},"upd":null},{"id":"sob-cam","o":"Sobral","d":"Camocim","price":"R$ 38,10","dur":150,"fim":"Camocim","paradas":[["Massapê",30],["Senador Sá",45],["Uruoca",60],["Martinópole",90]],"st":null,"times":{"sem":["06:00","08:00","11:00","13:00","15:00","17:00","18:20"],"sab":["06:00","08:00","11:00","13:00","15:00","17:00","18:20"],"dom":["07:00","11:00","18:20"]},"upd":null},{"id":"tia-cam","o":"Tianguá","d":"Camocim","price":"R$ 35,90","dur":195,"fim":"Camocim","paradas":[["Viçosa",40],["Santa Terezinha",110]],"st":null,"times":{"sem":["06:00","15:00"],"sab":["06:00","12:00"],"dom":[]},"upd":null},{"id":"bar-cam","o":"Barroquinha","d":"Camocim","price":"R$ 11,20","dur":50,"fim":null,"paradas":null,"st":{"06:15":["07:00"],"07:15":["08:00"],"08:15":["09:00"]},"times":{"sem":["05:40","06:10","06:40","07:10","08:10","09:40","10:30","11:30","12:50","14:40","16:50"],"sab":["06:15","07:15","08:15","10:30","12:50","16:50"],"dom":["07:10"]},"upd":null},{"id":"cha-cam","o":"Chaval","d":"Camocim","price":"R$ 14,95","dur":60,"fim":null,"paradas":null,"st":null,"times":{"sem":["06:00","06:30","07:00","09:30","11:40","12:50"],"sab":["07:10"],"dom":[]},"upd":null},{"id":"pre-cam","o":"Preá","d":"Camocim","price":"R$ 29,75","dur":150,"fim":"Camocim","paradas":[["Jijoca",45],["Parazinho",75],["Granja",110]],"st":null,"times":{"sem":["05:00","06:00","07:00","08:15","09:30","10:45","12:00","13:15","14:30","15:45","17:00","18:00"],"sab":["05:00","06:00","07:00","08:15","09:30","10:45","12:00","13:15","14:30","15:45","17:00","18:00"],"dom":["05:30","07:30","09:30","14:30","16:15","17:45"]},"upd":null},{"id":"chp-cam","o":"Chapada","d":"Camocim","price":"R$ 19,10","dur":85,"fim":"Camocim","paradas":[["Araras",20],["Barroquinha",45]],"st":null,"times":{"sem":["05:40"],"sab":[],"dom":[]},"upd":null},{"id":"bit-cam","o":"Bitupitá","d":"Camocim","price":"R$ 19,10","dur":75,"fim":"Camocim","paradas":[["Barroquinha",0]],"st":{"05:40":["06:15","06:55"],"06:40":["07:15","07:55"],"sab 06:40":["07:20","07:55"],"07:10":["07:40","08:20"],"13:00":["13:30","14:10"]},"times":{"sem":["05:40","06:40","07:10","13:00"],"sab":["06:40"],"dom":[]},"upd":null},{"id":"par-cam","o":"Parnaíba","d":"Camocim","price":"R$ 45,00","dur":120,"fim":null,"paradas":null,"st":null,"times":{"sem":["12:30"],"sab":["12:00"],"dom":[]},"upd":null},{"id":"gra-sob","o":"Granja","d":"Sobral","price":"Consulte","dur":120,"fim":"Sobral","paradas":[["Martinópole",30],["Uruoca",60],["Senador Sá",75],["Massapê",90]],"st":null,"times":{"sem":["05:00","06:20","07:00","09:00","11:00","13:00","15:00"],"sab":["05:00","06:20","07:00","09:00","11:00","13:00","15:00"],"dom":["06:30","11:00","14:00"]},"upd":false},{"id":"sob-gra","o":"Sobral","d":"Granja","price":"Consulte","dur":120,"fim":"Granja","paradas":[["Massapê",30],["Senador Sá",45],["Uruoca",60],["Martinópole",90]],"st":null,"times":{"sem":["07:00","09:00","10:00","12:00","14:00","16:00","17:40"],"sab":["07:00","09:00","10:00","12:00","14:00","16:00","17:40"],"dom":["09:00","15:00","17:00"]},"upd":false}];
+var SHOW=(C.site||location.origin).replace(/^https?:\/\//,"").replace(/\/$/,"");
+function $(i){return document.getElementById(i)}
+function S(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){return null}}
+function L(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+var tok=S("pt_tok"),exp=+S("pt_exp")||0,slides=[],IMG=new Image();IMG.src="icon-192.png";
+function hdr(a){var h={apikey:SB.key,"Content-Type":"application/json"};if(a)h.Authorization="Bearer "+tok;return h}
+function sair(){tok=null;S("pt_tok",null);S("pt_exp",null);$("app").hidden=true;$("login").hidden=false}
+function login(e){e.preventDefault();$("err").textContent="";
+ fetch(SB.url+"/auth/v1/token?grant_type=password",{method:"POST",headers:hdr(false),body:JSON.stringify({email:$("em").value.trim(),password:$("pw").value})})
+ .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})
+ .then(function(x){if(!x.ok||!x.j.access_token){$("err").textContent="E-mail ou senha incorretos.";return}
+  tok=x.j.access_token;exp=Date.now()+(x.j.expires_in||3600)*1000-60000;S("pt_tok",tok);S("pt_exp",String(exp));$("pw").value="";abrir()})
+ .catch(function(){$("err").textContent="Não foi possível conectar. Confira url e key no config.js."})}
+async function admin(){try{var r=await fetch(SB.url+"/rest/v1/rpc/topics_is_admin",{method:"POST",headers:hdr(true),body:"{}"});return r.ok&&(await r.json())===true}catch(e){return false}}
+async function abrir(){if(!tok||Date.now()>exp){sair();return}
+ if(!(await admin())){sair();$("err").textContent="Este usuário não tem permissão ou a sessão expirou.";return}
+ $("login").hidden=true;$("app").hidden=false;iniciar()}
+// ---------- dados ----------
+var toMin=function(t){var p=t.split(":");return +p[0]*60+ +p[1]},fmt=function(m){return("0"+Math.floor(m/60)%24).slice(-2)+":"+("0"+m%60).slice(-2)};
+var durF=function(m){return m<60?m+" min":Math.floor(m/60)+"h"+(m%60?("0"+m%60).slice(-2):"")};
+var stf=function(r,t,dk){return r.st&&(r.st[dk+" "+t]||r.st[t])};
+var arr=function(r,t,dk){var s=stf(r,t,dk);return s?s[s.length-1]:fmt(toMin(t)+r.dur)};
+function linha(r,t,dk){var s=stf(r,t,dk);return[t].concat(r.paradas.map(function(p,k){return s?s[k]:fmt(toMin(t)+p[1])}),[arr(r,t,dk)])}
+function dias(r,sel){var T=r.times,same=JSON.stringify(T.sab)===JSON.stringify(T.sem),o=[];
+ if(sel.sem&&T.sem.length)o.push({k:"sem",title:same&&sel.sab?"SEGUNDA A SÁBADO":"SEGUNDA A SEXTA",color:"#047a67",list:T.sem});
+ if(sel.sab&&!(same&&sel.sem)&&T.sab.length)o.push({k:"sab",title:"SÁBADO",color:"#1a6692",list:T.sab});
+ if(sel.dom&&T.dom.length)o.push({k:"dom",title:"DOMINGO",color:"#7b3d8e",list:T.dom});return o}
+// ---------- desenho ----------
+var FONT='"Barlow Condensed","Arial Narrow",Arial,sans-serif';
+var FORM={"4x5":{w:1080,h:1350,n:"Feed 4:5 (recomendado)"},"1x1":{w:1080,h:1080,n:"Quadrado 1:1"},"9x16":{w:1080,h:1920,n:"Stories 9:16"}};
+function mk(w,h){var c=document.createElement("canvas");c.width=w;c.height=h;return c}
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+function fit(x,t,maxW,size,wt){var s=size;while(s>10){x.font=wt+" "+s+"px "+FONT;if(x.measureText(t).width<=maxW)break;s-=1}return s}
+function txt(x,t,px,py,size,wt,col,al,maxW){if(maxW)size=fit(x,t,maxW,size,wt);x.font=wt+" "+size+"px "+FONT;x.fillStyle=col;x.textAlign=al||"left";x.textBaseline="alphabetic";x.fillText(t,px,py)}
+function base(F){var c=mk(F.w,F.h),x=c.getContext("2d");x.fillStyle="#14202B";x.fillRect(0,0,F.w,F.h);x.fillStyle="#F5C400";x.fillRect(0,0,F.w,14);return[c,x]}
+function logo(x,px,py,s){if(IMG.complete&&IMG.naturalWidth){x.drawImage(IMG,px,py,s,s)}}
+function rodape(x,F,o){txt(x,"Horários podem mudar sem aviso. Chegue cedo ao ponto de embarque.",F.w/2,F.h-76,26,"500","#93A3AF","center",F.w-96);
+ txt(x,SHOW+(o.handle?"   •   "+o.handle:""),F.w/2,F.h-32,32,"700","#F5C400","center",F.w-96)}
+function pilulas(x,F,itens,y){var h=64,gap=16,ws=itens.map(function(t){x.font="700 34px "+FONT;return x.measureText(t).width+56}),tot=ws.reduce(function(a,b){return a+b},0)+gap*(itens.length-1),px=(F.w-tot)/2;
+ itens.forEach(function(t,i){x.fillStyle="#26394A";rr(x,px,y,ws[i],h,32);x.fill();txt(x,t,px+ws[i]/2,y+44,34,"700","#fff","center");px+=ws[i]+gap})}
+function capa(r,F,o){var c_=base(F),c=c_[0],x=c_[1];logo(x,48,48,96);txt(x,"TOPICS DE CAMOCIM",164,112,44,"700","#F5C400","left");
+ var cy=F.h*0.34;txt(x,"HORÁRIOS DAS TOPICS",F.w/2,cy,42,"600","#B4C3CD","center");
+ txt(x,r.o.toUpperCase(),F.w/2,cy+150,170,"800","#fff","center",F.w-96);txt(x,"PARA",F.w/2,cy+240,56,"700","#F5C400","center");
+ txt(x,r.d.toUpperCase(),F.w/2,cy+400,170,"800","#F5C400","center",F.w-96);
+ var it=[r.price==="Consulte"?"Passagem: consulte":r.price,"Viagem: "+(r.st?"~":"")+durF(r.dur)];pilulas(x,F,it,cy+470);
+ if(r.paradas){txt(x,"Passa por "+r.paradas.map(function(p){return p[0]}).join(", "),F.w/2,cy+590,32,"500","#B4C3CD","center",F.w-96)}
+ txt(x,o.upd,F.w/2,F.h-150,34,"600","#fff","center",F.w-96);txt(x,"Arraste para ver os horários  →",F.w/2,F.h-96,34,"700","#F5C400","center");
+ txt(x,SHOW+(o.handle?"   •   "+o.handle:""),F.w/2,F.h-40,30,"700","#93A3AF","center",F.w-96);return c}
+function corpoDim(F){var top=14+150+28,bot=F.h-130;return{top:top,h:bot-top}}
+function capacidade(r,F){var b=corpoDim(F);return r.paradas?Math.max(1,Math.floor((b.h-70)/78)):Math.max(1,Math.floor(b.h/78))*3}
+function tabela(r,F,o,d,list,pg,np){var c_=base(F),c=c_[0],x=c_[1];
+ x.fillStyle=d.color;x.fillRect(0,14,F.w,150);logo(x,40,34,64);
+ txt(x,(r.o+" → "+r.d).toUpperCase(),120,78,34,"700","#fff","left",F.w-160);
+ txt(x,d.title+(np>1?"   ("+pg+"/"+np+")":""),120,138,60,"800","#fff","left",F.w-160);
+ var b=corpoDim(F),top=b.top;
+ if(!r.paradas){var cols=3,gap=14,mx=48,cw=(F.w-2*mx-gap*(cols-1))/cols,rows=Math.ceil(list.length/cols),ch=Math.max(60,Math.min(112,Math.floor(b.h/rows)-gap));
+  list.forEach(function(t,i){var px=mx+(i%cols)*(cw+gap),py=top+Math.floor(i/cols)*(ch+gap);
+   x.fillStyle="#1E2E3B";rr(x,px,py,cw,ch,14);x.fill();x.fillStyle=d.color;rr(x,px,py,12,ch,6);x.fill();
+   txt(x,t,px+34,py+ch*0.67,Math.min(ch*0.54,50),"800","#fff","left",cw*0.44);txt(x,"chega "+arr(r,t,d.k),px+cw-20,py+ch*0.64,Math.min(ch*0.31,30),"600","#faa61a","right",cw*0.40)})}
+ else{var cab=["SAÍDA"].concat(r.paradas.map(function(p){return p[0].toUpperCase()}),["CHEGADA"]),n=cab.length,mx2=36,cw2=(F.w-2*mx2)/n,rh=Math.max(56,Math.min(104,Math.floor((b.h-70)/list.length)-8));
+  x.fillStyle="#26394A";rr(x,mx2,top,F.w-2*mx2,58,12);x.fill();
+  cab.forEach(function(t,i){txt(x,t,mx2+cw2*i+cw2/2,top+39,24,"700",i===0?"#F5C400":(i===n-1?"#faa61a":"#B4C3CD"),"center",cw2-14)});
+  list.forEach(function(t,k){var py=top+70+k*(rh+8),v=linha(r,t,d.k);x.fillStyle=k%2?"#18283A":"#1E2E3B";rr(x,mx2,py,F.w-2*mx2,rh,12);x.fill();
+   v.forEach(function(s,i){txt(x,s,mx2+cw2*i+cw2/2,py+rh*0.66,rh*0.5,"800",i===0?"#fff":(i===n-1?"#faa61a":"#D5DDE2"),"center",cw2-16)})})}
+ rodape(x,F,o);return c}
+function chamada(r,F,o){var c_=base(F),c=c_[0],x=c_[1],m=F.h*0.2;logo(x,F.w/2-90,m,180);
+ txt(x,"QUER SABER A PRÓXIMA VAN?",F.w/2,m+320,64,"800","#fff","center",F.w-96);txt(x,"Veja em tempo real no app",F.w/2,m+400,46,"600","#B4C3CD","center",F.w-96);
+ x.fillStyle="#F5C400";rr(x,F.w/2-250,m+450,500,110,55);x.fill();txt(x,"LINK NA BIO",F.w/2,m+528,64,"800","#14202B","center");
+ txt(x,SHOW,F.w/2,m+640,44,"700","#F5C400","center",F.w-96);
+ txt(x,"Salve este post e envie para quem viaja",F.w/2,m+740,38,"600","#fff","center",F.w-96);txt(x,"de "+r.o+" para "+r.d,F.w/2,m+790,38,"600","#fff","center",F.w-96);
+ if(o.handle){txt(x,"Siga "+o.handle,F.w/2,F.h-110,44,"700","#F5C400","center",F.w-96)}
+ txt(x,"Topics de Camocim",F.w/2,F.h-50,32,"700","#93A3AF","center");return c}
+function gerarSlides(r,o){var F=FORM[o.formato],out=[],ds=dias(r,o.sel);out.push({c:capa(r,F,o),n:"capa"});
+ ds.forEach(function(d){var cap=capacidade(r,F),per=r.paradas?cap:cap,np=Math.ceil(d.list.length/per),size=Math.ceil(d.list.length/np);
+  for(var i=0;i!==np;i++){out.push({c:tabela(r,F,o,d,d.list.slice(i*size,(i+1)*size),i+1,np),n:d.k+(np>1?"-"+(i+1):"")})}});
+ if(o.cta){out.push({c:chamada(r,F,o),n:"chamada"})}return out}
+// ---------- legenda e hashtags ----------
+function slug(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9]/g,"")}
+function titulo(s){return s.charAt(0)+s.slice(1).toLowerCase()}
+function tags(r,n){var o=slug(r.o),d=slug(r.d),l=["#"+d+"CE","#"+o+"CE","#HorarioDeVan","#TopicsCamocim","#"+o+d,"#VansCamocim","#LitoralNorteCE","#CearaNorte","#TransporteAlternativo","#NorteDoCeara","#ViajarDeVan","#HorarioDeTopic","#Ceara","#CamocimCE"],u=[];
+ l.forEach(function(t){if(u.indexOf(t)===-1){u.push(t)}});return u.slice(0,n)}
+function legenda(r,o){var ds=dias(r,o.sel),T=r.times,k=[],preco=r.price==="Consulte"?"consulte a fiscalização":r.price;
+ k.push("🚐 Horário das topics de "+r.o+" para "+r.d);k.push("");
+ k.push("💵 Passagem: "+preco);k.push("⏱ Viagem: cerca de "+durF(r.dur)+(r.st?" (pode variar)":""));
+ if(r.paradas){k.push("🛣 Passa por: "+r.paradas.map(function(p){return p[0]}).join(", ")+" e "+(r.fim||r.d))}
+ if(o.estilo==="completa"){k.push("");ds.forEach(function(d){var q=d.list.length;k.push("📅 "+titulo(d.title)+": "+q+(q===1?" saída":" saídas")+", das "+d.list[0]+" às "+d.list[q-1])});
+  if(o.sel.dom&&!T.dom.length){k.push("📅 Domingo: sem saídas")}if(o.sel.sab&&!T.sab.length&&JSON.stringify(T.sab)!==JSON.stringify(T.sem)){k.push("📅 Sábado: sem saídas")}
+  k.push("");k.push("⚠️ Os horários podem mudar sem aviso. Chegue com antecedência ao ponto de embarque.")}
+ else{k.push("");k.push("➡️ Arraste para ver todos os horários.")}
+ k.push("");k.push("📲 Veja a próxima van em tempo real no nosso app: link na bio!");k.push("💾 Salve este post e 📤 envie para quem viaja nessa rota.");
+ if(o.handle){k.push("➕ Siga "+o.handle+" para mais horários.")}
+ k.push("");k.push(tags(r,o.nt).join(" "));return k.join("\n")}
+// ---------- tela ----------
+function opcoes(){var r=R.filter(function(x){return x.id===$("rota").value})[0];
+ return{r:r,formato:$("fmt").value,estilo:$("est").value,nt:+$("nt").value,cta:$("cta").checked,handle:$("hd").value.trim(),upd:$("upd").value.trim()||"Horários atualizados",
+  sel:{sem:$("dsem").checked,sab:$("dsab").checked,dom:$("ddom").checked}}}
+function nomeArq(o,n,i){return"topics-"+slug(o.r.o).toLowerCase()+"-"+slug(o.r.d).toLowerCase()+"-"+("0"+(i+1)).slice(-2)+"-"+n+".png"}
+function blob(c){return new Promise(function(ok){c.toBlob(ok,"image/png")})}
+function baixar(b,nome){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nome;document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL.revokeObjectURL(a.href)},2000)}
+var TCRC=(function(){var t=[],c,n,k;for(n=0;n!==256;n++){c=n;for(k=0;k!==8;k++){c=c&1?(c>>>1)^0xEDB88320:c>>>1}t.push(c>>>0)}return t})();
+function crc32(u){var c=-1,i;for(i=0;i!==u.length;i++){c=(c>>>8)^TCRC[(c^u[i])&255]}return(c^-1)>>>0}
+function zip(files){var enc=new TextEncoder(),parts=[],cd=[],off=0;
+ files.forEach(function(f){var nm=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length,lh=new DataView(new ArrayBuffer(30));
+  lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,sz,true);lh.setUint32(22,sz,true);lh.setUint16(26,nm.length,true);
+  parts.push(new Uint8Array(lh.buffer),nm,f.data);
+  var ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,sz,true);ch.setUint32(24,sz,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+  cd.push(new Uint8Array(ch.buffer),nm);off+=30+nm.length+sz});
+ var cds=0;cd.forEach(function(p){cds+=p.length});var e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cds,true);e.setUint32(16,off,true);
+ return new Blob(parts.concat(cd,[new Uint8Array(e.buffer)]),{type:"application/zip"})}
+async function gerar(){var o=opcoes();L("topics_ig_handle",o.handle);
+ try{await document.fonts.load('800 60px "Barlow Condensed"')}catch(e){}
+ if(!IMG.complete){await new Promise(function(ok){IMG.onload=ok;IMG.onerror=ok})}
+ slides=gerarSlides(o.r,o);var box=$("slides");box.innerHTML="";
+ slides.forEach(function(s,i){var f=document.createElement("div");f.className="slide";s.c.style.cssText="";f.appendChild(s.c);
+  var b=document.createElement("button");b.textContent="Baixar "+(i+1);b.onclick=async function(){baixar(await blob(s.c),nomeArq(o,s.n,i))};f.appendChild(b);box.appendChild(f)});
+ $("cap").value=legenda(o.r,o);cont();$("q").textContent=slides.length+" imagens ("+FORM[o.formato].w+" x "+FORM[o.formato].h+" px)"}
+function cont(){var v=$("cap").value,h=(v.match(/#[^\s#]+/g)||[]).length;$("cnt").textContent=v.length+" / 2.200 caracteres  •  "+h+" hashtags (máximo 30)";$("cnt").className=(v.length>2200||h>30)?"dn":"mut"}
+async function baixarTudo(){var o=opcoes(),fs=[];for(var i=0;i!==slides.length;i++){fs.push({name:nomeArq(o,slides[i].n,i),data:new Uint8Array(await (await blob(slides[i].c)).arrayBuffer())})}
+ baixar(zip(fs),"topics-"+slug(o.r.o).toLowerCase()+"-"+slug(o.r.d).toLowerCase()+"-instagram.zip")}
+async function copiar(){try{await navigator.clipboard.writeText($("cap").value);$("cp").textContent="Copiado!"}catch(e){$("cap").select();document.execCommand("copy");$("cp").textContent="Copiado!"}setTimeout(function(){$("cp").textContent="Copiar legenda"},2000)}
+async function compartilhar(){var o=opcoes(),files=[];for(var i=0;i!==slides.length;i++){files.push(new File([await blob(slides[i].c)],nomeArq(o,slides[i].n,i),{type:"image/png"}))}
+ try{await navigator.clipboard.writeText($("cap").value)}catch(e){}
+ if(navigator.canShare&&navigator.canShare({files:files})){try{await navigator.share({files:files,text:$("cap").value});return}catch(e){if(e&&e.name==="AbortError"){return}}}
+ alert("Seu navegador não compartilha direto. Baixe as imagens e copie a legenda.")}
+function iniciar(){if($("rota").options.length){return}
+ R.forEach(function(r){var o=document.createElement("option");o.value=r.id;o.textContent=r.o+" → "+r.d;$("rota").appendChild(o)});
+ Object.keys(FORM).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=FORM[k].n;$("fmt").appendChild(o)});
+ $("hd").value=L("topics_ig_handle")||"";
+ function upd(){var r=opcoes().r;$("upd").value=r.upd===false?"Tabela da Coopitrace":"Atualizado em "+(r.upd||"julho de 2026")}
+ $("rota").onchange=function(){upd();gerar()};upd();
+ ["fmt","est","nt","cta","hd","upd","dsem","dsab","ddom"].forEach(function(i){$(i).onchange=gerar});$("nt").oninput=function(){$("ntv").textContent=this.value};
+ $("cap").oninput=cont;$("bt").onclick=baixarTudo;$("cp").onclick=copiar;$("sh").onclick=compartilhar;$("gb").onclick=gerar;
+ if(!(navigator.canShare)){$("sh").style.display="none"}gerar()}
+if(document.getElementById("login")){
+ if(!SB.url||!SB.key){$("err").textContent="Preencha sb.url e sb.key no config.js."}
+ $("lf").onsubmit=login;$("out").onclick=sair;if(tok&&Date.now()<exp){abrir()}}
+</script></body></html>
