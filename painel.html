@@ -10,14 +10,14 @@ table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,t
 input,select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--l);background:var(--s);color:var(--ink)}
 button{cursor:pointer;font-weight:600}.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.err{color:#C8382E;min-height:20px;margin:8px 0}.mut{color:var(--m);font-size:13px}
-.ax{font-size:11px;fill:var(--m)}em{font-style:normal;font-weight:700}.card em{display:block;font-size:12px;margin-top:4px}.up{color:var(--a)}.dn{color:#E0443A}.fl{color:var(--m);font-weight:600}svg{width:100%;height:auto;display:block}
+.ax{font-size:11px;fill:var(--m)}em{font-style:normal;font-weight:700}.lnk{padding:10px 12px;border:1px solid var(--l);border-radius:10px;background:var(--s);color:var(--ink);text-decoration:none;font-weight:600}.card em{display:block;font-size:12px;margin-top:4px}.up{color:var(--a)}.dn{color:#E0443A}.fl{color:var(--m);font-weight:600}svg{width:100%;height:auto;display:block}
 .lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px}form{display:grid;gap:10px;max-width:340px}
 </style><script src="config.js"></script></head><body><main>
 <h1>Painel de acessos</h1>
 <section id="login"><p class="mut">Acesso restrito ao administrador.</p><form id="lf"><input id="em" type="email" placeholder="E-mail" autocomplete="username" required><input id="pw" type="password" placeholder="Senha" autocomplete="current-password" required><button class="pri" type="submit">Entrar</button></form></section>
 <div class="err" id="err"></div>
 <section id="dash" hidden>
-<div class="bar"><select id="dd" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select><button id="rf">Atualizar</button><button id="out">Sair</button><span class="mut" id="st"></span></div>
+<div class="bar"><select id="dd" aria-label="Período"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select><button id="rf">Atualizar</button><button id="out">Sair</button><a class="lnk" href="instagram.html">📷 Post para Instagram</a><span class="mut" id="st"></span></div>
 <div class="cards" id="cards"></div><p class="mut">As setas comparam com o período anterior do mesmo tamanho (por exemplo, os últimos 30 dias contra os 30 dias antes deles).</p>
 <h2>Crescimento</h2><div class="box" id="cre"></div>
 <h2>Por dia <span class="mut lg"><i style="background:var(--v)"></i>visualizações<i style="background:var(--a)"></i>visitas</span></h2><div class="box" id="graf"></div>
