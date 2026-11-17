@@ -75,12 +75,16 @@ function rodape(x,F,o){txt(x,"Horários podem mudar sem aviso. Chegue cedo ao po
  txt(x,SHOW+(o.handle?"   •   "+o.handle:""),F.w/2,F.h-32,32,"700","#F5C400","center",F.w-96)}
 function pilulas(x,F,itens,y){var h=64,gap=16,ws=itens.map(function(t){x.font="700 34px "+FONT;return x.measureText(t).width+56}),tot=ws.reduce(function(a,b){return a+b},0)+gap*(itens.length-1),px=(F.w-tot)/2;
  itens.forEach(function(t,i){x.fillStyle="#26394A";rr(x,px,y,ws[i],h,32);x.fill();txt(x,t,px+ws[i]/2,y+44,34,"700","#fff","center");px+=ws[i]+gap})}
+function coluna(it,top,bot,mg){var H=0;it.forEach(function(i){H+=i.h});var g=it.length>1?Math.max(8,Math.min(mg,(bot-top-H)/(it.length-1))):0,y=top+Math.max(0,(bot-top-(H+g*(it.length-1)))/2);it.forEach(function(i){i.f(y);y+=i.h+g})}
 function capa(r,F,o){var c_=base(F),c=c_[0],x=c_[1];logo(x,48,48,96);txt(x,"TOPICS DE CAMOCIM",164,112,44,"700","#F5C400","left");
- var cy=F.h*0.34;txt(x,"HORÁRIOS DAS TOPICS",F.w/2,cy,42,"600","#B4C3CD","center");
- txt(x,r.o.toUpperCase(),F.w/2,cy+150,170,"800","#fff","center",F.w-96);txt(x,"PARA",F.w/2,cy+240,56,"700","#F5C400","center");
- txt(x,r.d.toUpperCase(),F.w/2,cy+400,170,"800","#F5C400","center",F.w-96);
- var it=[r.price==="Consulte"?"Passagem: consulte":r.price,"Viagem: "+(r.st?"~":"")+durF(r.dur)];pilulas(x,F,it,cy+470);
- if(r.paradas){txt(x,"Passa por "+r.paradas.map(function(p){return p[0]}).join(", "),F.w/2,cy+590,32,"500","#B4C3CD","center",F.w-96)}
+ var big=F.h<1200?138:170,via=r.paradas?"Passa por "+r.paradas.map(function(p){return p[0]}).join(", "):"";
+ var it=[{h:34,f:function(y){txt(x,"HORÁRIOS DAS TOPICS",F.w/2,y+30,40,"600","#B4C3CD","center")}},
+  {h:big*0.78,f:function(y){txt(x,r.o.toUpperCase(),F.w/2,y+big*0.78,big,"800","#fff","center",F.w-96)}},
+  {h:48,f:function(y){txt(x,"PARA",F.w/2,y+44,54,"700","#F5C400","center")}},
+  {h:big*0.78,f:function(y){txt(x,r.d.toUpperCase(),F.w/2,y+big*0.78,big,"800","#F5C400","center",F.w-96)}},
+  {h:64,f:function(y){pilulas(x,F,[r.price==="Consulte"?"Passagem: consulte":r.price,"Viagem: "+(r.st?"~":"")+durF(r.dur)],y)}}];
+ if(via){it.push({h:30,f:function(y){txt(x,via,F.w/2,y+26,30,"500","#B4C3CD","center",F.w-96)}})}
+ coluna(it,170,F.h-215,40);
  txt(x,o.upd,F.w/2,F.h-150,34,"600","#fff","center",F.w-96);txt(x,"Arraste para ver os horários  →",F.w/2,F.h-96,34,"700","#F5C400","center");
  txt(x,SHOW+(o.handle?"   •   "+o.handle:""),F.w/2,F.h-40,30,"700","#93A3AF","center",F.w-96);return c}
 function corpoDim(F){var top=14+150+28,bot=F.h-130;return{top:top,h:bot-top}}
@@ -100,13 +104,16 @@ function tabela(r,F,o,d,list,pg,np){var c_=base(F),c=c_[0],x=c_[1];
   list.forEach(function(t,k){var py=top+70+k*(rh+8),v=linha(r,t,d.k);x.fillStyle=k%2?"#18283A":"#1E2E3B";rr(x,mx2,py,F.w-2*mx2,rh,12);x.fill();
    v.forEach(function(s,i){txt(x,s,mx2+cw2*i+cw2/2,py+rh*0.66,rh*0.5,"800",i===0?"#fff":(i===n-1?"#faa61a":"#D5DDE2"),"center",cw2-16)})})}
  rodape(x,F,o);return c}
-function chamada(r,F,o){var c_=base(F),c=c_[0],x=c_[1],m=F.h*0.2;logo(x,F.w/2-90,m,180);
- txt(x,"QUER SABER A PRÓXIMA VAN?",F.w/2,m+320,64,"800","#fff","center",F.w-96);txt(x,"Veja em tempo real no app",F.w/2,m+400,46,"600","#B4C3CD","center",F.w-96);
- x.fillStyle="#F5C400";rr(x,F.w/2-250,m+450,500,110,55);x.fill();txt(x,"LINK NA BIO",F.w/2,m+528,64,"800","#14202B","center");
- txt(x,SHOW,F.w/2,m+640,44,"700","#F5C400","center",F.w-96);
- txt(x,"Salve este post e envie para quem viaja",F.w/2,m+740,38,"600","#fff","center",F.w-96);txt(x,"de "+r.o+" para "+r.d,F.w/2,m+790,38,"600","#fff","center",F.w-96);
- if(o.handle){txt(x,"Siga "+o.handle,F.w/2,F.h-110,44,"700","#F5C400","center",F.w-96)}
- txt(x,"Topics de Camocim",F.w/2,F.h-50,32,"700","#93A3AF","center");return c}
+function chamada(r,F,o){var c_=base(F),c=c_[0],x=c_[1],L=Math.min(170,F.h*0.13);
+ var it=[{h:L,f:function(y){logo(x,F.w/2-L/2,y,L)}},
+  {h:56,f:function(y){txt(x,"QUER SABER A PRÓXIMA VAN?",F.w/2,y+50,64,"800","#fff","center",F.w-96)}},
+  {h:40,f:function(y){txt(x,"Veja em tempo real no app",F.w/2,y+36,44,"600","#B4C3CD","center",F.w-96)}},
+  {h:110,f:function(y){x.fillStyle="#F5C400";rr(x,F.w/2-250,y,500,110,55);x.fill();txt(x,"LINK NA BIO",F.w/2,y+78,64,"800","#14202B","center")}},
+  {h:40,f:function(y){txt(x,SHOW,F.w/2,y+36,44,"700","#F5C400","center",F.w-96)}},
+  {h:84,f:function(y){txt(x,"Salve este post e envie para quem viaja",F.w/2,y+34,38,"600","#fff","center",F.w-96);txt(x,"de "+r.o+" para "+r.d,F.w/2,y+80,38,"600","#fff","center",F.w-96)}}];
+ if(o.handle){it.push({h:44,f:function(y){txt(x,"Siga "+o.handle,F.w/2,y+38,44,"700","#F5C400","center",F.w-96)}})}
+ coluna(it,60,F.h-100,70);
+ txt(x,"Topics de Camocim",F.w/2,F.h-40,32,"700","#93A3AF","center");return c}
 function gerarSlides(r,o){var F=FORM[o.formato],out=[],ds=dias(r,o.sel);out.push({c:capa(r,F,o),n:"capa"});
  ds.forEach(function(d){var cap=capacidade(r,F),per=r.paradas?cap:cap,np=Math.ceil(d.list.length/per),size=Math.ceil(d.list.length/np);
   for(var i=0;i!==np;i++){out.push({c:tabela(r,F,o,d,d.list.slice(i*size,(i+1)*size),i+1,np),n:d.k+(np>1?"-"+(i+1):"")})}});
