@@ -185,7 +185,20 @@ P("gra-sob","Granja ➔ Sobral (via Martinópole, Uruoca, Senador Sá, Massapê)
 P("sob-gra","Sobral ➔ Granja (via Massapê, Senador Sá, Uruoca, Martinópole)","2026/08/horario-das-topics-de-sobral-para-granja.html",{price:"Consulte",upd:false,dur:120,fim:"Granja",paradas:[["Massapê",30],["Senador Sá",45],["Uruoca",60],["Martinópole",90]],times:{sem:sgw,sab:sgw,dom:["09:00","15:00","17:00"]}})
 ];
 // Para fixar o ponto exato de embarque, troque "q" por um endereço ou "latitude,longitude".
-const PONTOS={"Camocim":{q:"topics vans Camocim CE"},"Granja":{q:"topics vans Granja CE"},"Sobral":{q:"topics vans Sobral CE"},"Tianguá":{q:"topics vans Tianguá CE"},"Barroquinha":{q:"topics vans Barroquinha CE"},"Chaval":{q:"topics vans Chaval CE"},"Preá":{q:"topics vans Preá Cruz CE"},"Chapada":{q:"topics vans Chapada Barroquinha CE"},"Bitupitá":{q:"topics vans Bitupitá Barroquinha CE"},"Parnaíba":{q:"topics vans Parnaíba PI"}};
+const PONTOS={
+ "Camocim":{n:"Ponto das Topiques Camocim",e:"R. Vinte e Quatro de Maio, s/n, Camocim",ll:"-2.9000528,-40.8426401",pid:"ChIJaUBs_13b6wcRzFX0NoVLIhM",q:"Ponto das Topiques Camocim CE"},
+ "Granja":{n:"Ponto das Topics (Coopitrace)",e:"R. Tiago Ribas, 46a, Granja",ll:"-3.1203649,-40.8353659",pid:"ChIJ9S1RGKi56wcREg7csk2A2gc",q:"Ponto das Topics Coopitrace Granja CE"},
+ "Sobral":{n:"Terminal das Topics",e:"R. Tab. Ildefonso Cavalcante, 670, Centro, Sobral",ll:"-3.6910226,-40.359013",pid:"ChIJY_rdVQDH6gcRAuOEjcYUTqI",q:"Terminal das Topics Sobral CE"},
+ "Tianguá":{n:"Ponto das Topics",e:"Centro, Tianguá",ll:"-3.7307518,-40.9917927",pid:"ChIJ7XcsGLtJ6wcRfSeIiht3AoM",a:"Local aproximado no centro da cidade. Confirme no local.",q:"Ponto das Topics Tianguá CE"},
+ "Barroquinha":{n:"Ponto das Topiques",e:"R. Oito, 230-240, Jaime Laurindo, Barroquinha",ll:"-3.0198739,-41.1341734",pid:"ChIJXWa95t3z6wcRfYlCcKQ_6tc",q:"Ponto das Topiques Barroquinha CE"},
+ "Chaval":{q:"topics vans Chaval CE"},
+ "Preá":{n:"Topic Camocim Jijoca Preá",e:"Av. Manoel Marques Albuquerque, 1171, Jijoca de Jericoacoara",ll:"-2.8964043,-40.4483976",pid:"ChIJjfNzRfMn6gcR8W4ENcfx5DI",a:"Ponto em Jijoca de Jericoacoara, no caminho da van. Confirme no local.",q:"Topic Camocim Jijoca Preá"},
+ "Chapada":{n:"Chapada (Araras)",e:"Araras, Barroquinha",ll:"-2.9581013,-41.1946357",pid:"ChIJcdtDu47x6wcReEdOVd8sz6E",a:"Local aproximado. Confirme no local.",q:"Chapada Araras Barroquinha CE"},
+ "Bitupitá":{q:"topics vans Bitupitá Barroquinha CE"},
+ "Parnaíba":{q:"topics vans Parnaíba PI"}
+};
+// Pontos do Google Maps: n=nome, e=endereço, ll=latitude,longitude, pid=código do lugar, a=aviso. Sem "n", o app só abre uma busca (q).
+const gmp=(p,dir)=>{const k=p.ll||p.q;return "https://www.google.com/maps/"+(dir?"dir/?api=1&destination=":"search/?api=1&query=")+encodeURIComponent(k)+(p.pid?(dir?"&destination_place_id=":"&query_place_id=")+encodeURIComponent(p.pid):"")};
 // Anúncios: preencha t (título), d (descrição) e wa (WhatsApp com DDI, ex.: 5588999999999). Sem wa, o bloco aparece sem botão.
 // Chaves: "home", "tabela" e "mapa". Para uma rota específica use "tabela:cam-sob" ou "mapa:cam-sob".
 // Imagem do anúncio: acrescente img:"anuncios/home.jpg" (1200 x 400 px, JPG, PNG ou WebP, até 150 KB). Se a imagem não carregar, aparece o bloco de texto.
@@ -219,7 +232,7 @@ const autoAv=r=>{const a=[];if(r.price)a.push(["💵","Passagem: "+r.price,r.pri
   a.push(["📅","Sábado e domingo",(same?"Sábado segue os mesmos horários de segunda a sexta. ":t.sab.length?"Sábado tem horários próprios, veja na aba Horários. ":"Não há saídas aos sábados. ")+(d.length?"Domingo tem "+(d.length===1?"1 saída":d.length+" saídas")+", de "+d[0]+" a "+d[d.length-1]+".":"Não há saídas aos domingos.")])}
  return a};
 // Link do app usado no botão Compartilhar (troque se o app mudar de endereço).
-const LINK_APP=location.href.split("#")[0];
+const LINK_APP=location.origin+location.pathname+"?utm_source=whatsapp"+String.fromCharCode(38)+"utm_medium=compartilhar";
 const shareUrl=r=>{const n=r&&r.times?nextDep(r,new Date()):null;
  const msg="🚐 "+r.name.split(" (")[0]+(n?"\nPróxima van: "+(n.tomorrow?n.lab+", ":"")+fmt(n.dep):"")+"\nTodos os horários: "+LINK_APP+"#"+r.id;
  return "https://wa.me/?text="+encodeURIComponent(msg)};
@@ -304,9 +317,9 @@ function body(){
   const r=cur,url=BASE+r.path;
   stick();
   if(seg==="map"){try{window.Topics&&window.Topics.track("view","mapa:"+r.id)}catch(e){}
-    const c=r.name.split(" ➔")[0],q=(PONTOS[c]||{q:c+" CE"}).q;
-    $("body").innerHTML=`<div class="aviso"><div class="i">📍</div><div><b>Embarque em ${c}</b><span>Toque para procurar o ponto das topics no mapa e traçar o caminho até lá.</span></div></div>
-<div class="acts"><a class="btn" href="${gm(q)}" target="_blank" rel="noopener">Ver no mapa</a><a class="btn alt" href="${gm(q,1)}" target="_blank" rel="noopener">Como chegar</a></div>
+    const c=r.name.split(" ➔")[0],p=PONTOS[c]||{q:c+" CE"};
+    $("body").innerHTML=`<div class="aviso"><div class="i">📍</div><div>${p.n?`<b>${esc(p.n)}</b><span>${esc(p.e)}${p.a?" · "+esc(p.a):""}</span>`:`<b>Embarque em ${c}</b><span>Ainda não temos o ponto exato desta cidade. O botão abre uma busca no Google Maps.</span>`}</div></div>
+<div class="acts"><a class="btn" href="${gmp(p)}" target="_blank" rel="noopener">Ver no mapa</a><a class="btn alt" href="${gmp(p,1)}" target="_blank" rel="noopener">Como chegar</a></div>
 <div class="aviso"><div class="i">⚠️</div><div><b>Confirme o local</b><span>O ponto de embarque pode mudar. Na dúvida, pergunte à fiscalização (Coopitrace) pelo WhatsApp.</span></div></div>
 <p style="text-align:center"><a class="btn alt" href="https://wa.me/5588992266501" target="_blank" rel="noopener">Falar com a fiscalização</a></p>${adHtml("mapa",r.id)}`;
     return;
